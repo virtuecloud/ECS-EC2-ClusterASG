@@ -13,7 +13,7 @@ module "ecs_service" {
   requires_compatibilities = ["EC2"]
   capacity_provider_strategy = {
     # On-demand instances
-    ex-1 = {
+    cluster-asg = {
       capacity_provider = module.ecs_cluster.autoscaling_capacity_providers["cluster-asg"].name
       weight            = 1
       base              = 1
