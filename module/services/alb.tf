@@ -10,8 +10,8 @@ module "alb" {
 
   load_balancer_type = "application"
 
-  vpc_id          = module.vpc.vpc_id
-  subnets         = module.vpc.public_subnets
+  vpc_id          = var.vpc_id
+  subnets         = var.vpc_private_subnets
   security_groups = [module.alb_sg.security_group_id]
 
   http_tcp_listeners = [
@@ -31,7 +31,7 @@ module "alb" {
     },
   ]
 
-  tags = local.tags
+  tags = var.tags
 }
 
 ################################################################################
@@ -44,13 +44,14 @@ module "alb_sg" {
 
   name        = "${var.cluster_name}-service"
   description = "Service security group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress_rules       = ["http-80-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
 
   egress_rules       = ["all-all"]
-  egress_cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  # egress_cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  egress_cidr_blocks = var.vpc_private_subnets_cidr_block
 
-  tags = local.tags
+  tags = var.tags
 }

@@ -29,5 +29,5 @@ module "ecs_cluster" {
     }
   }
 
-  tags = local.tags
+  tags = var.tags
 }

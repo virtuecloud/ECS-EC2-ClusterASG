@@ -7,14 +7,16 @@ module "ecs_service" {
 
   # Service
   name        = "${var.cluster_name}-service"
-  cluster_arn = module.ecs_cluster.arn
+  # cluster_arn = module.ecs_cluster.arn################################################################################
+  cluster_arn = var.ecs_cluster_arn
 
   # Task Definition
   requires_compatibilities = ["EC2"]
   capacity_provider_strategy = {
     # On-demand instances
     cluster-asg = {
-      capacity_provider = module.ecs_cluster.autoscaling_capacity_providers["cluster-asg"].name
+      # capacity_provider = module.ecs_cluster.autoscaling_capacity_providers["cluster-asg"].name######################
+      capacity_provider = var.capacity_provider_arn
       weight            = 1
       base              = 1
     }
@@ -27,7 +29,7 @@ module "ecs_service" {
   # Container definition(s)
   container_definitions = {
     (var.container_name) = {
-      image = "nginx:latest"
+      image = var.container_image
       port_mappings = [
         {
           name          = var.container_name
@@ -58,7 +60,7 @@ module "ecs_service" {
     }
   }
 
-  subnet_ids = module.vpc.private_subnets
+  subnet_ids = var.vpc_private_subnets
   security_group_rules = {
     alb_http_ingress = {
       type                     = "ingress"
@@ -70,5 +72,5 @@ module "ecs_service" {
     }
   }
 
-  tags = local.tags
+  tags = var.tags
 }

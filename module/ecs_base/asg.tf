@@ -1,4 +1,12 @@
 ################################################################################
+# Data to get AMI ID ASG
+################################################################################
+
+data "aws_ssm_parameter" "ecs_optimized_ami" {
+  name = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended"
+}
+
+################################################################################
 # AutoScaling
 ################################################################################
 
@@ -17,7 +25,7 @@ module "autoscaling" {
         cat <<'EOF' >> /etc/ecs/ecs.config
         ECS_CLUSTER=${var.cluster_name}
         ECS_LOGLEVEL=debug
-        ECS_CONTAINER_INSTANCE_TAGS=${jsonencode(local.tags)}
+        ECS_CONTAINER_INSTANCE_TAGS=${jsonencode(var.tags)}
         ECS_ENABLE_TASK_IAM_ROLE=true
         EOF
       EOT
@@ -41,7 +49,8 @@ module "autoscaling" {
     AmazonSSMManagedInstanceCore        = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
 
-  vpc_zone_identifier = module.vpc.private_subnets
+  # vpc_zone_identifier = module.vpc.private_subnets
+  vpc_zone_identifier = var.vpc_private_subnets
   health_check_type   = "EC2"
   min_size            = var.desired_min_size
   max_size            = var.desired_min_size
@@ -55,7 +64,7 @@ module "autoscaling" {
   # Required for  managed_termination_protection = "ENABLED"
   protect_from_scale_in = true
 
-  tags = local.tags
+  tags = var.tags
 }
 
 ################################################################################
@@ -68,17 +77,17 @@ module "autoscaling_sg" {
 
   name        = "${var.cluster_name}-AutoScaling-SecurityGroup"
   description = "Autoscaling group security group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   computed_ingress_with_source_security_group_id = [
     {
       rule                     = "http-80-tcp"
-      source_security_group_id = module.alb_sg.security_group_id
+      source_security_group_id = var.alb_security_group_id
     }
   ]
   number_of_computed_ingress_with_source_security_group_id = 1
 
   egress_rules = ["all-all"]
 
-  tags = local.tags
+  tags = var.tags
 }

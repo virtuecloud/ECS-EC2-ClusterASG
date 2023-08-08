@@ -1,20 +1,11 @@
 variable "cluster_name" {
   
 }
-variable "region" {
+variable "vpc_id" {
   
 }
-variable "vpc_name" {
+variable "vpc_private_subnets" {
   
-}
-variable "vpc_cidr" {
-  
-}
-variable "container_name" {
-  
-}
-variable "container_port" {
-  type = number
 }
 variable "desired_max_size" {
   type = number
@@ -33,4 +24,10 @@ variable "minimum_scaling_step_size" {
 }
 variable "maximum_scaling_step_size" {
   type = number
+}
+variable "alb_security_group_id" {
+  
+}
+variable "tags" {
+  
 }
