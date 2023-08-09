@@ -1,22 +1,32 @@
 
-module "ecs" {
-  source = "./module/ecs"
-  cluster_name = "test-cluster"
+module "vpc_and_ecs_cluster" {
 
-  vpc_cidr = "10.0.0.0/16"
-  region = "us-east-1"
+  source                    = "./module/vpc_and_ecs_cluster"
+  vpc_cidr                  = "10.0.0.0/16"
+  vpc_name                  = "ECS-EC2-VPC"
+  cluster_name              = "test-cluster"
   container_port = 80
-  vpc_name = "ECS-EC2-VPC"
   container_name = "ecs-sample"
-
-#   vpc_id = module.vpc.vpc_id
-#   vpc_private_subnets = module.vpc.private_subnets
-  desired_max_size = 5
-  desired_size = 1
-  desired_min_size = 1
-  target_cpu_usage = 80
+  
+  region                    = "us-east-1"
+  desired_max_size          = 5
+  desired_size              = 1
+  desired_min_size          = 1
+  target_cpu_usage          = 80
   minimum_scaling_step_size = 1
   maximum_scaling_step_size = 5
-#   alb_security_group_id = module.ecs_service.alb_sg_id
-#   tags = local.tags
+
+}
+
+module "ecs_service" {
+  source         = "./module/ecs_service"
+  cluster_name   = "test-cluster"
+  container_port = 80
+  container_name = "ecs-sample"
+  cluster_arn = module.vpc_and_ecs_cluster.cluster_arn
+  capacity_provider_arn = module.vpc_and_ecs_cluster.capacity_provider_arn
+  target_group_arn = module.vpc_and_ecs_cluster.target_group_arn
+  vpc_private_subnets = module.vpc_and_ecs_cluster.vpc_private_subnets
+  alb_sg_id = module.vpc_and_ecs_cluster.alb_sg_id
+
 }
