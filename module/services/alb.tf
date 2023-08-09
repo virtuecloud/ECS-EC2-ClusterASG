@@ -11,12 +11,12 @@ module "alb" {
   load_balancer_type = "application"
 
   vpc_id          = var.vpc_id
-  subnets         = var.vpc_private_subnets
+  subnets         = var.vpc_public_subnets
   security_groups = [module.alb_sg.security_group_id]
 
   http_tcp_listeners = [
     {
-      port               = var.container_port
+      port               = 80
       protocol           = "HTTP"
       target_group_index = 0
     },

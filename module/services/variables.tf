@@ -1,6 +1,9 @@
 variable "cluster_name" {
   
 }
+variable "vpc_public_subnets" {
+  
+}
 variable "vpc_private_subnets" {
   
 }
