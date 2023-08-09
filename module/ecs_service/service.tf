@@ -43,6 +43,18 @@ module "ecs_service" {
         }
       ]
 
+      environment = [
+        {
+          name  = "DB_NAME"
+          value = "DEMO-123"
+        },
+        {
+          name  = "DB_USER"
+          value = "admin"
+        }
+        # Add more environment variables as needed
+      ]
+
     #   entry_point = ["/usr/sbin/apache2", "-D", "FOREGROUND"]
 
       # Example image used requires access to write to root filesystem
