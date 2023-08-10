@@ -33,6 +33,8 @@ module "ecs_service" {
   vpc_private_subnets = module.vpc_and_ecs_cluster.vpc_private_subnets
   alb_sg_id = module.vpc_and_ecs_cluster.alb_sg_id
 
+  
   task_environment_variables = each.value.envs
+  
 
 }

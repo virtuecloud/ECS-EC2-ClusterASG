@@ -55,8 +55,8 @@ module "ecs_service" {
       #   # Add more environment variables as needed
       # ]
 
-      # environment = var.task_environment_variables
-      environment = jsonencode(var.task_environment_variables)
+      environment = var.task_environment_variables
+      # environment = jsonencode(var.task_environment_variables)
 
     #   entry_point = ["/usr/sbin/apache2", "-D", "FOREGROUND"]
 
