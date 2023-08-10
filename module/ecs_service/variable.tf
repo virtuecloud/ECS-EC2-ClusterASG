@@ -22,9 +22,12 @@ variable "alb_sg_id" {}
 # variable "vpc_cidr" {
   
 # }
-variable "container_name" {
-  
-}
+variable "container_name" {}
+variable "container_image" {}
+variable "task_environment_variables" {}
+
+
+
 variable "container_port" {
   type = number
 }

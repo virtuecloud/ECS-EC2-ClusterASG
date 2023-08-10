@@ -27,7 +27,7 @@ module "ecs_service" {
   # Container definition(s)
   container_definitions = {
     (var.container_name) = {
-      image = "nginx:latest"
+      image = var.container_image
       port_mappings = [
         {
           name          = var.container_name
@@ -43,17 +43,20 @@ module "ecs_service" {
         }
       ]
 
-      environment = [
-        {
-          name  = "DB_NAME"
-          value = "DEMO-123"
-        },
-        {
-          name  = "DB_USER"
-          value = "admin"
-        }
-        # Add more environment variables as needed
-      ]
+      # environment = [
+      #   {
+      #     name  = "DB_NAME"
+      #     value = "DEMO-123"
+      #   },
+      #   {
+      #     name  = "DB_USER"
+      #     value = "admin"
+      #   }
+      #   # Add more environment variables as needed
+      # ]
+
+      # environment = var.task_environment_variables
+      environment = jsonencode(var.task_environment_variables)
 
     #   entry_point = ["/usr/sbin/apache2", "-D", "FOREGROUND"]
 
