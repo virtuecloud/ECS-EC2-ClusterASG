@@ -6,8 +6,8 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
 
-  # name = "${var.cluster_name}-${var.container_name}"
-  name = test
+  name = "${var.cluster_name}-${var.container_name}"
+  # name = test
   load_balancer_type = "application"
 
   vpc_id          = module.vpc.vpc_id

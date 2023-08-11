@@ -10,8 +10,8 @@ module "vpc_and_ecs_cluster" {
   
   region                    = "us-east-1"
   desired_max_size          = 5
-  desired_size              = 2
-  desired_min_size          = 2
+  desired_size              = 3
+  desired_min_size          = 3
   target_cpu_usage          = 80
   minimum_scaling_step_size = 1
   maximum_scaling_step_size = 5
@@ -34,6 +34,8 @@ module "ecs_service" {
   alb_sg_id = module.vpc_and_ecs_cluster.alb_sg_id
   alb_listener_arn = module.vpc_and_ecs_cluster.alb_listener_arn
 
+  
   task_environment_variables = each.value.envs
+  
 
 }
