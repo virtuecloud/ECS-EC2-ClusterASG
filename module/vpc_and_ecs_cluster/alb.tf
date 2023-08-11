@@ -6,8 +6,8 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
 
-  name = "${var.cluster_name}-${var.container_name}"
-
+  # name = "${var.cluster_name}-${var.container_name}"
+  name = test
   load_balancer_type = "application"
 
   vpc_id          = module.vpc.vpc_id
@@ -24,10 +24,10 @@ module "alb" {
 
   target_groups = [
     {
-      name             = "${var.cluster_name}-${var.container_name}"
+      name             = "${var.cluster_name}-${var.container_name}1"
       backend_protocol = "HTTP"
       backend_port     = var.container_port
-      target_type      = "ip"
+      target_type      = "instance"
     },
   ]
 

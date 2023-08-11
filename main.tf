@@ -29,9 +29,10 @@ module "ecs_service" {
   container_image = each.value.container_image
   cluster_arn = module.vpc_and_ecs_cluster.cluster_arn
   capacity_provider_arn = module.vpc_and_ecs_cluster.capacity_provider_arn
-  target_group_arn = module.vpc_and_ecs_cluster.target_group_arn
-  vpc_private_subnets = module.vpc_and_ecs_cluster.vpc_private_subnets
+  # target_group_arn = module.vpc_and_ecs_cluster.target_group_arn
+  service_subnets = module.vpc_and_ecs_cluster.vpc_private_subnets
   alb_sg_id = module.vpc_and_ecs_cluster.alb_sg_id
+  alb_listener_arn = module.vpc_and_ecs_cluster.alb_listener_arn
 
   task_environment_variables = each.value.envs
 

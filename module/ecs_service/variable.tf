@@ -7,10 +7,12 @@ variable "cluster_arn" {
 variable "capacity_provider_arn" {
   
 }
-variable "target_group_arn" {
+# variable "target_group_arn" {
   
+# }
+variable "service_subnets" {
+  type = list(string)
 }
-variable "vpc_private_subnets" {}
 variable "alb_sg_id" {}
 
 # variable "region" {
@@ -25,6 +27,7 @@ variable "alb_sg_id" {}
 variable "container_name" {}
 variable "container_image" {}
 variable "task_environment_variables" {}
+variable "alb_listener_arn" {}
 
 
 
