@@ -10,8 +10,8 @@ module "vpc_and_ecs_cluster" {
   
   region                    = "us-east-1"
   desired_max_size          = 5
-  desired_size              = 3
-  desired_min_size          = 3
+  desired_size              = 2
+  desired_min_size          = 2
   target_cpu_usage          = 80
   minimum_scaling_step_size = 1
   maximum_scaling_step_size = 5

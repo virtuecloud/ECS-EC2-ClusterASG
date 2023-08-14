@@ -44,7 +44,7 @@ module "autoscaling" {
   vpc_zone_identifier = module.vpc.private_subnets
   health_check_type   = "EC2"
   min_size            = var.desired_min_size
-  max_size            = var.desired_min_size
+  max_size            = var.desired_max_size
   desired_capacity    = var.desired_size
 
   # https://github.com/hashicorp/terraform-provider-aws/issues/12582
@@ -53,7 +53,8 @@ module "autoscaling" {
   }
 
   # Required for  managed_termination_protection = "ENABLED"
-  protect_from_scale_in = true
+  protect_from_scale_in = false
+  
 
   tags = local.tags
 }
@@ -74,7 +75,8 @@ module "autoscaling_sg" {
     {
       rule                     = "http-80-tcp"
       source_security_group_id = module.alb_sg.security_group_id
-    }
+    },
+  
   ]
   number_of_computed_ingress_with_source_security_group_id = 1
 
@@ -82,3 +84,5 @@ module "autoscaling_sg" {
 
   tags = local.tags
 }
+
+

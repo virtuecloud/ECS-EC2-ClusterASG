@@ -25,6 +25,7 @@
   }
 ] )
   memory = 1024
+  cpu = 1024
   requires_compatibilities = ["EC2"]
   network_mode = "bridge"
   execution_role_arn = aws_iam_role.task_def_role.arn

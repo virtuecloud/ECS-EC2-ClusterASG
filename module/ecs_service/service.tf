@@ -16,7 +16,7 @@ resource "aws_lb_target_group" "service_tg" {
   cluster = var.cluster_arn
   task_definition = aws_ecs_task_definition.example_task_def.arn
   launch_type = "EC2"
-  desired_count = 5
+  desired_count = 1
   depends_on = [aws_cloudwatch_log_group.example_cw_log_group]
   
 
