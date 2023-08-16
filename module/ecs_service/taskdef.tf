@@ -22,8 +22,19 @@
           }
         },
         "environment": var.task_environment_variables == [] ? null : var.task_environment_variables
+
+        "secrets": var.task_secrets_variables == [] ? null : var.task_secrets_variables
+
+        #  "secrets": [
+        #         {
+        #             "name": "env-from-ARN",
+        #             "valueFrom": "arn:aws:secretsmanager:us-east-1:331313361307:secret:mongodb-secret-dev-SHTuqC"
+                    
+        #         },
+        #     ],
   }
 ] )
+
   memory = 1024
   cpu = 1024
   requires_compatibilities = ["EC2"]
@@ -31,6 +42,7 @@
   execution_role_arn = aws_iam_role.task_def_role.arn
   
 }
+
 resource "aws_iam_role" "task_def_role" {
   name = "${var.container_name}_task_def_role"
   assume_role_policy = jsonencode({
@@ -47,29 +59,49 @@ resource "aws_iam_role" "task_def_role" {
     ]
   })
 }
+
 resource "aws_iam_role_policy" "ecr-iam-policy" {
   name = "${var.container_name}_task_def_policy"
   role = aws_iam_role.task_def_role.id
   policy = jsonencode({
-    "Version": "2012-10-17",
+  
+    "Version": "2012-10-17"
     "Statement": [
         {
             "Action": [
-                "logs:*"
+                "logs:PutLogEvents",
+                "logs:CreateLogStream"
             ],
             "Effect": "Allow",
-            "Resource": "*"
+            "Resource": "*",
+            "Sid": "Logs"
         },
         {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
             "Action": [
                 "ecr:GetDownloadUrlForLayer",
+                "ecr:GetAuthorizationToken",
                 "ecr:BatchGetImage",
-                "ecr:GetAuthorizationToken"
+                "ecr:BatchCheckLayerAvailability"
             ],
-            "Resource": "*"
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "ECR"
+        },
+        {
+            "Action": "secretsmanager:GetSecretValue",
+            "Effect": "Allow",
+            "Resource": "arn:aws:secretsmanager:*:*:secret:*",
+            "Sid": "GetSecrets"
         }
     ]
+
 })
 } 
+
+data "aws_secretsmanager_secret" "secrets" {
+  arn = "arn:aws:secretsmanager:us-east-1:331313361307:secret:mongodb-secret-dev-SHTuqC"
+}
+
+data "aws_secretsmanager_secret_version" "current" {
+  secret_id = data.aws_secretsmanager_secret.secrets.id
+}

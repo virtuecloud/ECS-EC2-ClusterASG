@@ -1,4 +1,4 @@
 variable "containers" {
-  type = map
+  type    = map(any)
   default = {}
 }
