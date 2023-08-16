@@ -9,9 +9,12 @@ variable "alb_listener_arn" {}
 variable "container_name" {}
 variable "container_port" {  type = number }
 variable "container_image" {}
+variable "task_count" {}
+variable "ecs_service_name" {}
 
 variable "task_environment_variables" {}
 variable "task_secrets_variables" {}
+variable "application_environment" {}
 
 
 

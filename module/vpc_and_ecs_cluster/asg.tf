@@ -64,26 +64,6 @@ module "autoscaling" {
 # AutoScaling Security Group
 ################################################################################
 
-# module "autoscaling_sg" {
-#   source  = "terraform-aws-modules/security-group/aws"
-#   version = "~> 5.0"
-
-#   name        = "${var.cluster_name}-AutoScaling-SecurityGroup"
-#   description = "Autoscaling group security group"
-#   vpc_id      = module.vpc.vpc_id
-
-# computed_ingress_with_source_security_group_id = [
-#     {
-#       rule                     = "all-traffic"
-#       source_security_group_id = module.alb_sg.security_group_id
-#     },
-#   ]
-#   # number_of_computed_ingress_with_source_security_group_id = 10
-
-#   egress_rules = ["all-all"]
-
-#   tags = local.tags
-# }
 
 resource "aws_security_group" "asg_sg" {
   name        = "${var.cluster_name}_AutoScaling_Security_Group"

@@ -16,7 +16,7 @@ module "alb" {
 
   http_tcp_listeners = [
     {
-      port               = var.container_port
+      port               = "80"
       protocol           = "HTTP"
       target_group_index = 0
     },
@@ -26,7 +26,7 @@ module "alb" {
     {
       name             = "${var.cluster_name}-${var.container_name}1"
       backend_protocol = "HTTP"
-      backend_port     = var.container_port
+      backend_port     = "80"
       target_type      = "instance"
     },
   ]

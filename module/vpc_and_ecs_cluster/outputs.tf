@@ -7,10 +7,6 @@ output "capacity_provider_arn" {
   value = module.ecs_cluster.autoscaling_capacity_providers["cluster-asg"].name
 }
 
-# output "target_group_arn" {
-#   value = element(module.alb.target_group_arns, 0)
-# }
-
 output "vpc_private_subnets" {
   value = module.vpc.private_subnets
 }

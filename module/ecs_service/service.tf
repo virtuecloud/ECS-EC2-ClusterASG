@@ -1,9 +1,5 @@
-data "aws_vpc" "service_vpc" {
-  id = data.aws_subnet.service_subnet.vpc_id
-}
-data "aws_subnet" "service_subnet" {
-  id = var.service_subnets[0]  
-}
+
+
 resource "aws_lb_target_group" "service_tg" {
   name     = "${var.container_name}-tg"
   port     = var.container_port
@@ -12,12 +8,12 @@ resource "aws_lb_target_group" "service_tg" {
 }
 
  resource "aws_ecs_service" "example-ecs-service" {
-  name = var.container_name
-  cluster = var.cluster_arn
-  task_definition = aws_ecs_task_definition.example_task_def.arn
-  launch_type = "EC2"
-  desired_count = 1
-  depends_on = [aws_cloudwatch_log_group.example_cw_log_group]
+  name  =   var.ecs_service_name
+  cluster   =   var.cluster_arn
+  task_definition   =  aws_ecs_task_definition.example_task_def.arn
+  launch_type =  "EC2"
+  desired_count   = var.task_count
+  depends_on =   [aws_cloudwatch_log_group.example_cw_log_group]
   
 
   load_balancer {
@@ -32,14 +28,13 @@ resource "aws_lb_target_group" "service_tg" {
    name = "/ecs/${var.container_name}"
 
    tags = {
-     Environment = "stage"
+     Environment = var.application_environment
      Application = "${var.container_name}"
    }
  }
 
  resource "aws_lb_listener_rule" "attach_tg" {
   listener_arn = var.alb_listener_arn[0] 
-
 
   action {
     type             = "forward"

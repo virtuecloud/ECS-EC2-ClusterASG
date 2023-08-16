@@ -25,13 +25,6 @@
 
         "secrets": var.task_secrets_variables == [] ? null : var.task_secrets_variables
 
-        #  "secrets": [
-        #         {
-        #             "name": "env-from-ARN",
-        #             "valueFrom": "arn:aws:secretsmanager:us-east-1:331313361307:secret:mongodb-secret-dev-SHTuqC"
-                    
-        #         },
-        #     ],
   }
 ] )
 
@@ -98,10 +91,3 @@ resource "aws_iam_role_policy" "ecr-iam-policy" {
 })
 } 
 
-data "aws_secretsmanager_secret" "secrets" {
-  arn = "arn:aws:secretsmanager:us-east-1:331313361307:secret:mongodb-secret-dev-SHTuqC"
-}
-
-data "aws_secretsmanager_secret_version" "current" {
-  secret_id = data.aws_secretsmanager_secret.secrets.id
-}
