@@ -36,7 +36,7 @@ module "ecs_service" {
 
 
   task_environment_variables = each.value.envs
-  task_secrets_variables = each.value.secrets
+  task_secrets_variables     = each.value.secrets
 
 
 }

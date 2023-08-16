@@ -29,7 +29,8 @@ module "autoscaling" {
   image_id      = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami.value)["image_id"]
   instance_type = each.value.instance_type
 
-  security_groups                 = [module.autoscaling_sg.security_group_id]
+  # security_groups                 = [module.autoscaling_sg.security_group_id]
+  security_groups                 = [aws_security_group.asg_sg.id]
   user_data                       = base64encode(each.value.user_data)
   ignore_desired_capacity_changes = true
 
@@ -63,26 +64,52 @@ module "autoscaling" {
 # AutoScaling Security Group
 ################################################################################
 
-module "autoscaling_sg" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 5.0"
+# module "autoscaling_sg" {
+#   source  = "terraform-aws-modules/security-group/aws"
+#   version = "~> 5.0"
 
-  name        = "${var.cluster_name}-AutoScaling-SecurityGroup"
+#   name        = "${var.cluster_name}-AutoScaling-SecurityGroup"
+#   description = "Autoscaling group security group"
+#   vpc_id      = module.vpc.vpc_id
+
+# computed_ingress_with_source_security_group_id = [
+#     {
+#       rule                     = "all-traffic"
+#       source_security_group_id = module.alb_sg.security_group_id
+#     },
+#   ]
+#   # number_of_computed_ingress_with_source_security_group_id = 10
+
+#   egress_rules = ["all-all"]
+
+#   tags = local.tags
+# }
+
+resource "aws_security_group" "asg_sg" {
+  name        = "${var.cluster_name}_AutoScaling_Security_Group"
   description = "Autoscaling group security group"
   vpc_id      = module.vpc.vpc_id
 
-  computed_ingress_with_source_security_group_id = [
-    {
-      rule                     = "http-80-tcp"
-      source_security_group_id = module.alb_sg.security_group_id
-    },
-  
-  ]
-  number_of_computed_ingress_with_source_security_group_id = 1
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 0
+    to_port          = 65535
+    protocol         = "tcp"
+    cidr_blocks      = [module.vpc.vpc_cidr_block]
+    # ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+  }
 
-  egress_rules = ["all-all"]
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
 
-  tags = local.tags
+  tags = {
+    Name = "auto_scaling_group_SG"
+  }
 }
 
 
