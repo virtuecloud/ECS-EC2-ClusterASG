@@ -23,3 +23,6 @@ variable "target_cpu_usage" {  type = number }
 variable "minimum_scaling_step_size" {  type = number }
 
 variable "maximum_scaling_step_size" {  type = number }
+
+
+

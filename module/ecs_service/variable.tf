@@ -1,4 +1,5 @@
 variable "cluster_name" {}
+variable "region" {}
 variable "cluster_arn" {}
 variable "capacity_provider_arn" {}
 

@@ -17,7 +17,7 @@
           "logDriver": "awslogs",
           "options": {
             "awslogs-group": "/ecs/${var.container_name}",
-            "awslogs-region": "us-east-1",
+            "awslogs-region": var.region,
             "awslogs-stream-prefix": "ecs"
           }
         },

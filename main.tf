@@ -24,6 +24,7 @@ module "ecs_service" {
   for_each = var.containers
 
   cluster_name            = var.cluster_name
+  region                  = var.region
   task_count              = each.value.task_count
   container_port          = each.value.container_port
   container_name          = each.value.container_name
