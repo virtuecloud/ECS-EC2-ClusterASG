@@ -30,6 +30,7 @@ module "ecs_service" {
   container_image         = each.value.container_image
   ecs_service_name        = each.value.ecs_service_name
   application_environment = var.application_environment
+  host_header             = each.value.host_header
 
 
   cluster_arn                = module.vpc_and_ecs_cluster.cluster_arn

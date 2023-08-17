@@ -1,11 +1,11 @@
 
-
 resource "aws_lb_target_group" "service_tg" {
   name     = "${var.container_name}-tg"
   port     = var.container_port
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.service_vpc.id
 }
+
 
  resource "aws_ecs_service" "example-ecs-service" {
   name  =   var.ecs_service_name
@@ -15,7 +15,6 @@ resource "aws_lb_target_group" "service_tg" {
   desired_count   = var.task_count
   depends_on =   [aws_cloudwatch_log_group.example_cw_log_group]
   
-
   load_balancer {
     target_group_arn = aws_lb_target_group.service_tg.arn
     container_name = var.container_name
@@ -42,7 +41,7 @@ resource "aws_lb_target_group" "service_tg" {
   }
   condition {
     host_header {
-      values = ["${var.container_name}-example.com"]  
+      values = [var.host_header]
     }
  }
  }

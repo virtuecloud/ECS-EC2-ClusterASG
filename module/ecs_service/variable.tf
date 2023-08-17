@@ -5,6 +5,7 @@ variable "capacity_provider_arn" {}
 variable "service_subnets" {  type = list(string) }
 variable "alb_sg_id" {}
 variable "alb_listener_arn" {}
+variable "host_header" {}
 
 variable "container_name" {}
 variable "container_port" {  type = number }

@@ -19,3 +19,7 @@ output "alb_listener_arn" {
   value = module.alb.http_tcp_listener_arns
 }
 
+output "lb_dns_name" {
+  description = "The DNS name of the load balancer."
+  value       = module.alb.lb_dns_name
+}
